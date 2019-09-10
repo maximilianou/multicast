@@ -36,7 +36,7 @@ Future send(addr_ip, multicastPort) async {
       stdout.write("Sending $msg  \r");
       print("SEND:: "
           " ${multicastAddress.address} : ${multicastPort} :: [${msg}]");
-      s.send('$msg\n'.codeUnits, multicastAddress, multicastPort);
+      s.send('$mensaje'.codeUnits, multicastAddress, multicastPort);
     });
   });
 }
