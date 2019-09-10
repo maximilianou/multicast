@@ -9,6 +9,23 @@ import 'dart:math';
 Future send(addr_ip, multicastPort) async {
   InternetAddress multicastAddress = new InternetAddress(addr_ip);
   Random rng = new Random();
+  Map<String, Object> mensaje = {
+ "__type": "GetCMIConfigRequest",
+ "timeStamp": new DateTime.now(),
+ "sender": {
+   "__type": "BaseStamp",
+   "name": "vloud.sala.mobile",
+   "id": "",
+   "version": ""
+ },
+ "addressee": {
+   "__type": "BaseStamp",
+   "name": "vloud.sala.cmi",
+   "id": "",
+   "version": ""
+ },
+ "correlationId": 1
+};
   RawDatagramSocket.bind(InternetAddress.anyIPv4, 0)
       .then((RawDatagramSocket s) {
     print("SEND:: "
