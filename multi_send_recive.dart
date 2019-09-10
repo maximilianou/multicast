@@ -11,13 +11,13 @@ Future send(addr_ip, multicastPort) async {
   Random rng = new Random();
   RawDatagramSocket.bind(InternetAddress.anyIPv4, 0)
       .then((RawDatagramSocket s) {
-    print("SEND::UDP Socket ready to send to group "
+    print("SEND:: "
         "${multicastAddress.address}:${multicastPort}");
     new Timer.periodic(new Duration(seconds: 2), (Timer t) {
       //Send a random number out every second
-      String msg = 'Sending Channel Uno:: ${rng.nextInt(1000)}';
+      String msg = ':: ${rng.nextInt(1000)}';
       stdout.write("Sending $msg  \r");
-      print("SEND::UDP Socket send to group "
+      print("SEND:: "
           " ${multicastAddress.address} : ${multicastPort} :: [${msg}]");
       s.send('$msg\n'.codeUnits, multicastAddress, multicastPort);
     });
@@ -28,7 +28,6 @@ void receive(addr_ip, multicastPort) async {
   InternetAddress multicastAddress = new InternetAddress(addr_ip);
   RawDatagramSocket.bind(InternetAddress.anyIPv4, multicastPort)
       .then((RawDatagramSocket socket) {
-    print('RECIEVE::Datagram socket ready to receive');
     print('RECIEVE:: ${socket.address.address} : ${socket.port} ');
 
     socket.joinMulticast(multicastAddress);
@@ -40,7 +39,7 @@ void receive(addr_ip, multicastPort) async {
 
       String message = new String.fromCharCodes(d.data).trim();
       print(
-          'RECIEVE::Datagram from ${d.address.address}:${d.port}: ${message}');
+          'RECIEVE::from ${d.address.address}:${d.port}: ${message}');
     });
   });
 }
