@@ -1,5 +1,5 @@
+import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 RawDatagramSocket socket;
 InternetAddress multicastAddress = InternetAddress("224.1.1.1");
@@ -42,6 +42,8 @@ Future receiveUDPMulticastTest() async {
       if (datagram == null) return;
       String message = String.fromCharCodes(datagram.data).trim();
       print('R::${datagram.address.address}:${datagram.port}: $message');
+
+      sendUDPMulticastTest();
     });
   });
 }
@@ -50,12 +52,26 @@ Future receiveUDPMulticastTest() async {
 //ENVIO.
 //
 Future sendUDPMulticastTest() async {
-  Random rng = Random();
-  print("S::Socket UDP listo para enviar al grupo "
-      "${multicastAddress.address}:$multicastPort");
-  String msg = 'RESP::MOBILE::${rng.nextInt(1000)}';
-  stdout.write("S:: $msg \n");
-  socket.send('$msg\n'.codeUnits, multicastAddress, multicastPort);
+  Map<String, Object> mensaje = {
+    "__type": "GetCMIConfigRequest",
+    "timeStamp": DateTime.now().toUtc().toIso8601String(),
+    "sender": {
+      "__type": "BaseStamp",
+      "name": "vloud.sala.mobile",
+      "id": "",
+      "version": ""
+    },
+    "addressee": {
+      "__type": "BaseStamp",
+      "name": "vloud.sala.cmi",
+      "id": "",
+      "version": ""
+    },
+    "correlationId": 1
+  };
+  var jsonMsg = jsonEncode(mensaje);
+  stdout.write("S:: $mensaje \n");
+  socket.send('$jsonMsg'.codeUnits, multicastAddress, multicastPort);
 }
 
 void main() async {
