@@ -30,20 +30,17 @@ Future receiveUDPMulticastTest() async {
   });
   RawDatagramSocket.bind(multicastAddress, multicastPort)
       .then((RawDatagramSocket socket) {
-    print('Datagram socket listo para recibir');
-    print('${socket.address.address}:${socket.port}');
+    print('R::${socket.address.address}:${socket.port}');
 
     socket.multicastLoopback = false;
     socket.joinMulticast(multicastAddress, wlanNetworkInterface);
-    print('Multicast group joined');
 
     socket.listen((RawSocketEvent e) {
       Datagram datagram = socket.receive();
       if (datagram == null) return;
-
       String message = String.fromCharCodes(datagram.data).trim();
       print(
-          'Datagrama de ${datagram.address.address}:${datagram.port}: $message');
+          'R::from::${datagram.address.address}:${datagram.port}: $message');
     });
   });
 }
@@ -53,11 +50,14 @@ Future receiveUDPMulticastTest() async {
 //
 Future sendUDPMulticastTest() async {
   Random rng = Random();
-
-  print("Socket UDP listo para enviar al grupo "
+  print("S::Socket UDP listo para enviar al grupo "
       "${multicastAddress.address}:$multicastPort");
-
-  String msg = 'RESPUESTA MOBILE:${rng.nextInt(1000)}';
-  stdout.write("Enviando $msg  \r");
+  String msg = 'RESP::MOBILE::${rng.nextInt(1000)}';
+  stdout.write("S:: $msg \n");
   socket.send('$msg\n'.codeUnits, multicastAddress, multicastPort);
+}
+
+void main(){
+  sendUDPMulticastTest();
+  receiveUDPMulticastTest();
 }
