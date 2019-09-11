@@ -23,7 +23,7 @@ Future<void> getHotspotConfiguration() async {
 //RECEPCION
 Future receiveUDPMulticastTest() async {
   await getHotspotConfiguration();
-  print("rec:: ipLocal:${ipLocal}  multicastPort:${multicastPort}");
+  print("rec:: ipLocal:${ipLocal}  multicastPort:${multicastPort}\n\n");
   // ESTO FUNCIONA CON EL HOTSPOT (SI NO, LOS ENVIOS NO FUNCIONAN)
   await RawDatagramSocket.bind(ipLocal, multicastPort)
       .then((RawDatagramSocket s) {
@@ -32,7 +32,7 @@ Future receiveUDPMulticastTest() async {
   });
   await RawDatagramSocket.bind(multicastAddress, multicastPort)
       .then((RawDatagramSocket socket) {
-    print('R::${socket.address.address}:${socket.port}');
+    print('R::${socket.address.address}:${socket.port}\n\n');
 
     socket.multicastLoopback = false;
     socket.joinMulticast(multicastAddress, wlanNetworkInterface);
@@ -42,7 +42,7 @@ Future receiveUDPMulticastTest() async {
       Datagram datagram = socket.receive();
       if (datagram == null) return;
       String message = String.fromCharCodes(datagram.data).trim();
-      print('R::${datagram.address.address}:${datagram.port}: $message');
+      print('R::${datagram.address.address}:${datagram.port}: ${message}\n\n');
       if (someTimes++ % 3 == 0) {
         sendUDPMulticastTest();
       }
@@ -72,7 +72,7 @@ Future sendUDPMulticastTest() async {
     "correlationId": 1
   };
   var jsonMsg = jsonEncode(mensaje);
-  stdout.write("S:: $mensaje \n");
+  stdout.write("S:: $mensaje \n\n");
   socket.send('$jsonMsg'.codeUnits, multicastAddress, multicastPort);
 }
 
