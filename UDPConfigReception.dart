@@ -37,13 +37,15 @@ Future receiveUDPMulticastTest() async {
     socket.multicastLoopback = false;
     socket.joinMulticast(multicastAddress, wlanNetworkInterface);
 
+    var someTimes = 0;
     socket.listen((RawSocketEvent e) {
       Datagram datagram = socket.receive();
       if (datagram == null) return;
       String message = String.fromCharCodes(datagram.data).trim();
       print('R::${datagram.address.address}:${datagram.port}: $message');
-
-      sendUDPMulticastTest();
+      if (someTimes++ % 3 == 0) {
+        sendUDPMulticastTest();
+      }
     });
   });
 }
