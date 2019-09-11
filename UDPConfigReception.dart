@@ -11,7 +11,8 @@ Future<void> getHotspotConfiguration() async {
   List<NetworkInterface> networkInterfacesList =
       await NetworkInterface.list(type: InternetAddressType.any);
 
-  var networkInterfaces = networkInterfacesList.where((i) => i.name == 'wlan0');
+  var networkInterfaces = networkInterfacesList.where(
+      (i) => 'mlan0' == i.name || 'wlan0' == i.name || 'enp1s0' == i.name);
 
   for (final network in networkInterfaces) {
     ipLocal = network.addresses[0];
@@ -22,13 +23,14 @@ Future<void> getHotspotConfiguration() async {
 //RECEPCION
 Future receiveUDPMulticastTest() async {
   await getHotspotConfiguration();
-
+  print("rec:: ipLocal:${ipLocal}  multicastPort:${multicastPort}");
   // ESTO FUNCIONA CON EL HOTSPOT (SI NO, LOS ENVIOS NO FUNCIONAN)
-  RawDatagramSocket.bind(ipLocal, multicastPort).then((RawDatagramSocket s) {
+  await RawDatagramSocket.bind(ipLocal, multicastPort)
+      .then((RawDatagramSocket s) {
     // RawDatagramSocket.bind(InternetAddress.anyIPv4, multicastPort).then((RawDatagramSocket s) { // ESTO FUNCIONA CON WIFI
     socket = s;
   });
-  RawDatagramSocket.bind(multicastAddress, multicastPort)
+  await RawDatagramSocket.bind(multicastAddress, multicastPort)
       .then((RawDatagramSocket socket) {
     print('R::${socket.address.address}:${socket.port}');
 
@@ -39,8 +41,7 @@ Future receiveUDPMulticastTest() async {
       Datagram datagram = socket.receive();
       if (datagram == null) return;
       String message = String.fromCharCodes(datagram.data).trim();
-      print(
-          'R::from::${datagram.address.address}:${datagram.port}: $message');
+      print('R::from::${datagram.address.address}:${datagram.port}: $message');
     });
   });
 }
@@ -57,7 +58,7 @@ Future sendUDPMulticastTest() async {
   socket.send('$msg\n'.codeUnits, multicastAddress, multicastPort);
 }
 
-void main(){
-  sendUDPMulticastTest();
-  receiveUDPMulticastTest();
+void main() async {
+  await receiveUDPMulticastTest();
+  await sendUDPMulticastTest();
 }
