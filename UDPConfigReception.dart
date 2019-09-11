@@ -41,7 +41,7 @@ Future receiveUDPMulticastTest() async {
       Datagram datagram = socket.receive();
       if (datagram == null) return;
       String message = String.fromCharCodes(datagram.data).trim();
-      print('R::from::${datagram.address.address}:${datagram.port}: $message');
+      print('R::${datagram.address.address}:${datagram.port}: $message');
     });
   });
 }
