@@ -5,13 +5,16 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:math';
+import 'dart:convert';
+
+final jsonEncoder = JsonEncoder(); 
 
 Future send(addr_ip, multicastPort) async {
   InternetAddress multicastAddress = new InternetAddress(addr_ip);
   Random rng = new Random();
   Map<String, Object> mensaje = {
  "__type": "GetCMIConfigRequest",
- "timeStamp": new DateTime.now(),
+ "timeStamp": (DateTime.now()).toString(),
  "sender": {
    "__type": "BaseStamp",
    "name": "vloud.sala.mobile",
@@ -36,7 +39,7 @@ Future send(addr_ip, multicastPort) async {
       stdout.write("Sending $msg  \r");
       print("SEND:: "
           " ${multicastAddress.address} : ${multicastPort} :: [${msg}]");
-      s.send('$mensaje'.codeUnits, multicastAddress, multicastPort);
+      s.send('${jsonEncoder.convert(mensaje)}'.codeUnits, multicastAddress, multicastPort);
     });
   });
 }
