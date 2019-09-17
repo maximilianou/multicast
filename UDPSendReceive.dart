@@ -14,7 +14,7 @@ Future send(addr_ip, multicastPort) async {
   Random rng = new Random();
   Map<String, Object> mensaje = {
  "__type": "GetCMIConfigRequest",
- "timeStamp": (DateTime.now()).toString(),
+ "timeStamp": DateTime.now().toUtc().toIso8601String(),
  "sender": {
    "__type": "BaseStamp",
    "name": "vloud.sala.mobile",
