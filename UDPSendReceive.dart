@@ -29,6 +29,39 @@ Future send(addr_ip, multicastPort) async {
  },
  "correlationId": 1
 };
+
+  Map<String, Object> mensaje2 = {"__type":"GetCMIConfigResponse",
+  "timeStamp":"2019-09-17T14:36:14.331Z",
+  "sender":{"__type":"BaseStamp","name":"vloud.sala.mobile","id":"","version":""},
+  "addressee":{"__type":"BaseStamp","name":"vloud.sala.cmi","id":"","version":""},
+  "body":{"__type":"CMIConfigDTO","version":"",
+  "behavior":{"__type":"CMIBehaviorConfigDTO",
+  "allowRepeatedLibEvents":false,
+  "repeatedLibEventsEnableThreshold":1800000,
+  "storageMetersTimeInterval":null,"reportDataInterval":900000,
+  "purgeDataInterval":86400000,
+  "aliveReceptionTimeoutInterval":5000,
+  "aliveReceptionTimeoutMaxRetryCount":5,
+  "aliveNotificationPeriod":5000,"metersHandling":[],
+  "eventsHandling":[]},
+  "core":{"__type":"CMICoreConfigDTO","Id":0,"salaId":0,
+  "newsRetrievalPollingThreshold":5000,"updatePending":false,
+  "staticConfig":{"__type":"StaticConfigContainerDTO","data":null},
+  "localNetwork":{"__type":"WiFiNetworkDTO","SSID":"cebra-wifi","password":"vloud-rules","interface":"mlan0"},
+  "backupNetwork":{"__type":"WiFiNetworkDTO","SSID":"","password":"","interface":""}},
+  "egm":{"__type":"EGMLibConfigDTO","version":"",
+  "core":{"__type":"EGMCoreLibConfigDTO","EGMId":"",
+  "SASId":"","autoResetHandPayEnabled":false,
+  "autoResetHandPayTopAmount":0,"forcedDenoValue":0,
+  "forcedPaymentAmount":0,"dynamicFlags":[],
+  "operationMode":"","currencyISOCode":"","billMeters":[]},
+  "tito":{"__type":"EGMTitoLibConfigDTO"},
+  "sala":{"__type":"EGMSalaLibConfigDTO","areaId":0},
+  "taxes":{"__type":"EGMTaxLibConfigDTO"}},
+  "hardwareDevices":[]},
+  "correlationId":1};
+
+
   RawDatagramSocket.bind(InternetAddress.anyIPv4, 0)
       .then((RawDatagramSocket s) {
     print("SEND:: "
@@ -39,7 +72,8 @@ Future send(addr_ip, multicastPort) async {
       stdout.write("Sending $msg  \r");
       print("SEND:: "
           " ${multicastAddress.address} : ${multicastPort} :: [${msg}]");
-      s.send('${jsonEncoder.convert(mensaje)}'.codeUnits, multicastAddress, multicastPort);
+//      s.send('${jsonEncoder.convert(mensaje)}'.codeUnits, multicastAddress, multicastPort);
+      s.send('${jsonEncoder.convert(mensaje2)}'.codeUnits, multicastAddress, multicastPort);
     });
   });
 }
