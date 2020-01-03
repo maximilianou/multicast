@@ -6,13 +6,14 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:math';
 
-void main(List<String> args){
+void main(List<String> args) {
   InternetAddress multicastAddress = new InternetAddress('239.10.10.100');
   int multicastPort = 4545;
   Random rng = new Random();
-  RawDatagramSocket.bind(InternetAddress.ANY_IP_V4, 0).then((RawDatagramSocket s) {
+  RawDatagramSocket.bind(InternetAddress.anyIPv4, 0)
+      .then((RawDatagramSocket s) {
     print("UDP Socket ready to send to group "
-      "${multicastAddress.address}:${multicastPort}");
+        "${multicastAddress.address}:${multicastPort}");
 
     new Timer.periodic(new Duration(seconds: 1), (Timer t) {
       //Send a random number out every second
